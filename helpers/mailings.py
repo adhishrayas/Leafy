@@ -19,7 +19,7 @@ def send_verification_mail(sender,instance,**kwargs):
         subject = "Verification mail",
         body = html_content,
         from_email=EMAIL_HOST_USER,
-        bcc = [recipient],
+        bcc = [],
         reply_to=[EMAIL_HOST_USER],
     )
     mail.content_subtype = "html"
