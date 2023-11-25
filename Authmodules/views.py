@@ -42,7 +42,7 @@ class EmailVerificationView(APIView):
      def get(self,request):
           id = self.request.query_params.get('id')
           user = CustomUser.objects.get(id = id)
-          user.verified = True
+          user.Verified = True
           user.save()
           return Response({"message":"Email Verified"},status = status.HTTP_200_OK)
 
