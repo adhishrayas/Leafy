@@ -40,8 +40,8 @@ class EmailVerificationView(APIView):
      permission_classes = (AllowAny,)
 
      def get(self,request):
-          email = self.request.query_params.get('email')
-          user = CustomUser.objects.get(email = email)
+          id = self.request.query_params.get('id')
+          user = CustomUser.objects.get(id = id)
           user.verified = True
           user.save()
           return Response({"message":"Email Verified"},status = status.HTTP_200_OK)

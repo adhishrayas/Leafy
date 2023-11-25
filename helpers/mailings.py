@@ -13,7 +13,7 @@ def send_verification_mail(sender,instance,**kwargs):
     recipient = instance.email
     user = CustomUser.objects.get(email = recipient)
     html_content = render_to_string(htmly,{
-        'url':f"Verification_mail/{user.id}"
+        'url':f"http://adhishraya.pythonanywhere.com/accounts/verify?id={user.id}"
     })
     mail = EmailMultiAlternatives(
         subject = "Verification mail",
