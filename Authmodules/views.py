@@ -1,9 +1,11 @@
 from django.shortcuts import render
+from django.conf import settings
+from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login,logout
 from django.utils.decorators import method_decorator
 from .models import CustomUser
-from .serializers import SignUpSerializer,LoginSerializer
+from .serializers import SignUpSerializer,LoginSerializer,ResetPasswordSerializer,ForgotPasswordSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import status
@@ -73,3 +75,34 @@ class LogoutView(APIView):
           logout(request)
           token.delete()
           return Response({"message":"Succesfully logged out"},status=status.HTTP_200_OK)
+     
+@method_decorator(csrf_exempt,name = 'post')
+class ForgotPasswordView(APIView):
+    permission_classes = (AllowAny,)
+    serializer_class = ForgotPasswordSerializer
+    def post(self,request,*args, **kwargs):
+        email = request.data.get('email')
+        try:
+            user = CustomUser.objects.get(email = email)
+            subject = 'Password reset mail'
+            message = f'Reset password here -> http://adhishraya.pythonanywhere.com/accounts/resetpassword?id={user.id}'
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [user.email,]
+            send_mail(subject,message,email_from,recipient_list)
+        except:
+            return Response({"message":"No account with this mail found"},status=status.HTTP_400_BAD_REQUEST)
+
+
+@method_decorator(csrf_exempt,name = 'post')
+class ResetPasswordView(GenericAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = ResetPasswordSerializer
+
+    def post(self,request,*args, **kwargs):
+        user_id = self.request.query_params.get('id')
+        user = CustomUser.objects.get(id = user_id)
+        password = request.data.get('password')
+        user.password = password
+        user.save()
+        return Response({"message":"Password reset succesfull"},status=status.HTTP_200_OK)
+    
