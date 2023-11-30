@@ -33,6 +33,11 @@ class SignUpView(GenericAPIView):
               except:
                    user.delete()
                    return Response({'message':'unable to create account:Token authentication failed'},status = status.HTTP_400_BAD_REQUEST)
+              subject = 'Verification mail'
+              message = f'Reset password here -> http://adhishraya.pythonanywhere.com/accounts/verify?id={user.id}'
+              email_from = settings.EMAIL_HOST_USER
+              recipient_list = [user.email,]
+              send_mail(subject,message,email_from,recipient_list)
               login(request,user)
               return Response({'token':token.key,'data':serializer.data},status=status.HTTP_201_CREATED)
 
@@ -89,6 +94,7 @@ class ForgotPasswordView(APIView):
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [user.email,]
             send_mail(subject,message,email_from,recipient_list)
+            return Response({"message":"password reset mail sent succesfully"},status=status.HTTP_200_OK)
         except:
             return Response({"message":"No account with this mail found"},status=status.HTTP_400_BAD_REQUEST)
 
