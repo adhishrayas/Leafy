@@ -27,3 +27,17 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
     
+
+class Address(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4
+    )
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,blank = True,null = True)
+    Address_line1 = models.CharField(max_length=255,blank=True,null=True)
+    Address_line2 = models.CharField(max_length=255,blank=True,null=True)
+    City = models.CharField(max_length=255,blank=True,null=True)
+    State = models.CharField(max_length=255,blank=True,null=True)
+    Pin_code = models.IntegerField(blank=True,null=True)
+

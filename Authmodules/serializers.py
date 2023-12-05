@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser,Address
 
 class SignUpSerializer(serializers.ModelSerializer):
 
@@ -24,3 +24,19 @@ class ForgotPasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ("email",)
+
+class AddressSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Address
+        exclude = ("id","user")
+
+
+class AccountInformationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ("username","Profile_pic","Petal_credits","Phone_no","email",)
+        extra_kwargs = {
+            "email":{"read_only":True},
+            "Petal_credits":{"read_only":True},
+        }
