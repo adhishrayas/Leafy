@@ -69,7 +69,7 @@ class LoginView(GenericAPIView):
               login(request,user)
               token,_ = Token.objects.get_or_create(user = user)
               user_data = AccountInformationSerializer(user)
-              return Response({"message":"Succesful login","token":token.key,"user_data":user_data.data},status=status.HTTP_202_ACCEPTED)
+              return Response({"message":"Succesful login","token":token.key,"user_id":user.id,"user_data":user_data.data},status=status.HTTP_202_ACCEPTED)
             else:
                 return Response({"message":"Please use correct credentials"},status=status.HTTP_400_BAD_REQUEST)
          except:
