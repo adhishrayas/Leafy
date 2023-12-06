@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django.urls import reverse
 from django.conf import settings
+from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login,logout
@@ -28,6 +30,7 @@ class SignUpView(GenericAPIView):
               serializer.is_valid(raise_exception=True)
               serializer.save()
               user = serializer.instance
+              user.Verified = False
               try:
                 token,_ = Token.objects.get_or_create(user = user)
               except:
@@ -51,7 +54,7 @@ class EmailVerificationView(APIView):
           user = CustomUser.objects.get(id = id)
           user.Verified = True
           user.save()
-          return Response({"message":"Email Verified"},status = status.HTTP_200_OK)
+          return HttpResponseRedirect({"message":"Email verified,redirecting.."},reverse('Authmodules:login'))
 
 
 class LoginView(GenericAPIView):
