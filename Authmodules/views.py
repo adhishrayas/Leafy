@@ -42,7 +42,7 @@ class SignUpView(GenericAPIView):
               email_from = settings.EMAIL_HOST_USER
               recipient_list = [user.email,]
               send_mail(subject,message,email_from,recipient_list)
-              return Response({'message':'Account Created!, Verify account through mail'},status=status.HTTP_201_CREATED)
+              return Response({'message':'Account Created!, Verify account through mail','user_id':user.id},status=status.HTTP_201_CREATED)
 
 
 @method_decorator(csrf_exempt,name= 'get')             
