@@ -65,7 +65,8 @@ class LoginView(GenericAPIView):
             if user.password == request.data.get('password'):
               login(request,user)
               token,_ = Token.objects.get_or_create(user = user)
-              return Response({"message":"Succesful login","token":token.key},status=status.HTTP_202_ACCEPTED)
+              user_id = user.id
+              return Response({"message":"Succesful login","token":token.key,"user_id":user_id},status=status.HTTP_202_ACCEPTED)
             else:
                 return Response({"message":"Wrong Credentials"},status=status.HTTP_400_BAD_REQUEST)
          except:
