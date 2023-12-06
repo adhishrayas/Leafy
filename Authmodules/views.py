@@ -1,3 +1,4 @@
+import time
 from django.shortcuts import render
 from django.urls import reverse
 from django.conf import settings
@@ -54,7 +55,7 @@ class EmailVerificationView(APIView):
           user = CustomUser.objects.get(id = id)
           user.Verified = True
           user.save()
-          return HttpResponseRedirect(reverse('Authmodules:login'))
+          return Response({"message":"Email verified"},status=status.HTTP_200_OK)
 
 
 class LoginView(GenericAPIView):
@@ -65,13 +66,13 @@ class LoginView(GenericAPIView):
      def post(self,request,*args, **kwargs):
          try:
             user = CustomUser.objects.get(username = request.data.get('username'))
-            if user.password == request.data.get('password'):
+            if user.password == request.data.get('password') and user.Verified == True:
               login(request,user)
               token,_ = Token.objects.get_or_create(user = user)
               user_id = user.id
               return Response({"message":"Succesful login","token":token.key,"user_id":user_id},status=status.HTTP_202_ACCEPTED)
             else:
-                return Response({"message":"Wrong Credentials"},status=status.HTTP_400_BAD_REQUEST)
+                return Response({"message":"Please ensure your account is verified and you are adding correct credentials"},status=status.HTTP_400_BAD_REQUEST)
          except:
               return Response({'message','User doesnt exist'},status=status.HTTP_400_BAD_REQUEST)
          
