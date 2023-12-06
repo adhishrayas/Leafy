@@ -42,8 +42,7 @@ class SignUpView(GenericAPIView):
               email_from = settings.EMAIL_HOST_USER
               recipient_list = [user.email,]
               send_mail(subject,message,email_from,recipient_list)
-              login(request,user)
-              return Response({'token':token.key,'data':serializer.data},status=status.HTTP_201_CREATED)
+              return Response({'data':serializer.data},status=status.HTTP_201_CREATED)
 
 
 @method_decorator(csrf_exempt,name= 'get')             
@@ -69,8 +68,8 @@ class LoginView(GenericAPIView):
             if user.password == request.data.get('password') and user.Verified == True:
               login(request,user)
               token,_ = Token.objects.get_or_create(user = user)
-              user_id = user.id
-              return Response({"message":"Succesful login","token":token.key,"user_id":user_id},status=status.HTTP_202_ACCEPTED)
+              user_data = AccountInformationSerializer(user)
+              return Response({"message":"Succesful login","token":token.key,"user_data":user_data.data},status=status.HTTP_202_ACCEPTED)
             else:
                 return Response({"message":"Please ensure your account is verified and you are adding correct credentials"},status=status.HTTP_400_BAD_REQUEST)
          except:
