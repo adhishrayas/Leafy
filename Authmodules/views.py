@@ -71,7 +71,7 @@ class LoginView(GenericAPIView):
               user_data = AccountInformationSerializer(user)
               return Response({"message":"Succesful login","token":token.key,"user_data":user_data.data},status=status.HTTP_202_ACCEPTED)
             else:
-                return Response({"message":"Please ensure your account is verified and you are adding correct credentials"},status=status.HTTP_400_BAD_REQUEST)
+                return Response({"message":"Please use correct credentials"},status=status.HTTP_400_BAD_REQUEST)
          except:
               return Response({'message','User doesnt exist'},status=status.HTTP_400_BAD_REQUEST)
          
