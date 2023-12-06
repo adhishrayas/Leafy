@@ -54,7 +54,7 @@ class EmailVerificationView(APIView):
           user = CustomUser.objects.get(id = id)
           user.Verified = True
           user.save()
-          return HttpResponseRedirect({"message":"Email verified,redirecting.."},reverse('Authmodules:login'))
+          return HttpResponseRedirect(reverse('Authmodules:login'))
 
 
 class LoginView(GenericAPIView):
