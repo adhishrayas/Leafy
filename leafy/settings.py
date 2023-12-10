@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     #local apps
     'Authmodules.apps.AuthmodulesConfig',
     'vendors.apps.VendorsConfig',
+    'Products.apps.ProductsConfig',
 ]
 
 MIDDLEWARE = [
